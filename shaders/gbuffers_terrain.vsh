@@ -24,6 +24,7 @@ varying float viewDistance;
 varying vec3 viewPosition;
 varying vec3 viewNormal;
 varying vec3 worldPosition;
+varying vec3 worldNormal;
 
 #include "/distort.glsl"
 
@@ -52,6 +53,7 @@ void main() {
     viewPosition = viewPos.xyz;
     viewNormal = normalize(gl_NormalMatrix * gl_Normal);
     worldPosition = (gbufferModelViewInverse * viewPos).xyz;
+    worldNormal = normalize(mat3(gbufferModelViewInverse) * viewNormal);
     viewDistance = length(viewPos.xyz);
     fogFactor = clamp(exp(-pow(length(viewPos.xyz) * (0.006 + ATMOSPHERIC_FOG * 0.004), 2.0)), 0.0, 1.0);
     if (lightDot > 0.0) {

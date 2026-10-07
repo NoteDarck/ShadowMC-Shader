@@ -103,3 +103,11 @@ Durante a chuva, blocos opacos recebem um escurecimento discreto e um brilho esp
 ## Poças reflexivas na chuva
 
 Poças sutis aparecem apenas com chuva, em manchas irregulares de superfícies quase horizontais. A máscara usa posição do mundo, normal e direção do sol, com brilho especular barato. O efeito não é aplicado em água existente, folhagem ou blocos emissivos.
+
+## Correção das poças e ondulações
+
+A máscara agora usa a normal no espaço do mundo, então não desaparece quando a câmera inclina. As poças têm manchas mais visíveis e ondulações procedurais animadas por `frameTimeCounter`, ativadas somente pela chuva. O efeito continua restrito a superfícies horizontais e materiais não emissivos.
+
+## Pente-fino das poças
+
+Foi corrigida a mistura de espaços de coordenadas: a máscara usa normal do mundo e o reflexo usa normal de visão, compatível com `sunPosition`/`viewDir`. A mancha foi reforçada, o limiar foi ampliado e as ondulações ficaram mais visíveis. O custo continua restrito ao branch de chuva, com uma função de ruído e uma onda procedural, sem novo buffer ou amostras de tela.

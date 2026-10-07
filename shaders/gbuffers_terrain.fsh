@@ -11,7 +11,7 @@
 #define WET_GROUND_STRENGTH 0.22 // Brilho/escurecimento do solo molhado [0.00 0.12 0.22 0.32 0.40]
 #endif
 #ifndef PUDDLE_STRENGTH
-#define PUDDLE_STRENGTH 0.16 // Intensidade das poças [0.00 0.08 0.16 0.24]
+#define PUDDLE_STRENGTH 0.28 // Intensidade das poças [0.00 0.12 0.20 0.28 0.36]
 #endif
 
 uniform sampler2D lightmap;
@@ -21,6 +21,7 @@ uniform sampler2D texture;
 uniform vec3 fogColor;
 uniform float rainStrength;
 uniform vec3 sunPosition;
+uniform float frameTimeCounter;
 
 varying vec2 lmcoord;
 varying vec2 texcoord;
@@ -32,6 +33,7 @@ varying float emissiveType;
 varying vec3 viewPosition;
 varying vec3 viewNormal;
 varying vec3 worldPosition;
+varying vec3 worldNormal;
 
 #include "/distort.glsl"
 
@@ -82,13 +84,19 @@ void main() {
         color.rgb += vec3(0.82, 0.90, 1.0) * wetHighlight;
 
         // Poças pequenas: somente superfícies quase horizontais recebem a máscara.
-        float flatSurface = smoothstep(0.78, 0.96, abs(viewNormal.y));
+        float flatSurface = smoothstep(0.82, 0.98, abs(worldNormal.y));
         vec2 puddleCell = floor(worldPosition.xz * 0.22);
-        float puddlePatch = smoothstep(0.58, 0.82, puddleNoise(puddleCell));
+        float puddlePatch = smoothstep(0.48, 0.76, puddleNoise(puddleCell));
         float puddleMask = rainStrength * PUDDLE_STRENGTH * flatSurface * puddlePatch;
-        float puddleHighlight = pow(max(dot(reflectedSun, viewDir), 0.0), 28.0) * puddleMask * 0.55;
-        color.rgb *= 1.0 - puddleMask * 0.18;
-        color.rgb += vec3(0.72, 0.84, 1.0) * puddleHighlight;
+        float ripplePhase = dot(worldPosition.xz, vec2(1.70, 1.25)) * 3.0 + frameTimeCounter * 4.0;
+        float rippleWave = 0.5 + 0.5 * sin(ripplePhase);
+        float rippleBand = smoothstep(0.70, 0.92, rippleWave) * puddleMask;
+        // O reflexo usa viewNormal porque sunPosition e viewDir estão em espaço de visão.
+        vec3 rippleNormal = normalize(viewNormal + vec3(sin(ripplePhase) * 0.08, 0.0, cos(ripplePhase) * 0.08));
+        float puddleHighlight = pow(max(dot(reflectedSun, viewDir), 0.0), 24.0) * puddleMask * 0.75;
+        float rippleHighlight = pow(max(dot(reflect(-viewDir, rippleNormal), viewDir), 0.0), 8.0) * rippleBand * 1.15;
+        color.rgb = mix(color.rgb, color.rgb * vec3(0.74, 0.82, 0.88) + vec3(0.035), puddleMask * 0.65);
+        color.rgb += vec3(0.72, 0.84, 1.0) * (puddleHighlight + rippleHighlight);
     }
     color.rgb = mix(fogColor, color.rgb, fogFactor);
 
