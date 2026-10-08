@@ -1,65 +1,42 @@
 #version 120
 
-#define COLORED_SHADOWS 0 // Sombras neutras, sem tingir partículas [0 1 2]
-#ifndef SHADOW_BRIGHTNESS
-#define SHADOW_BRIGHTNESS 0.75 // Luz preservada na sombra [0.00 0.25 0.50 0.60 0.65 0.70 0.75 0.80 0.90 1.00]
-#endif
-#include "/shadow_filter.glsl"
-
+#define SHADOW_MAP_RESOLUTION 1024 // [256 512 1024] Resolução do mapa de sombras
+#define SHADOW_BIAS 1.25 // [0.75 1.00 1.25 1.50 1.80] Correção contra shadow acne
+#define SHADOW_DISTORT_FACTOR 0.10 // [0.05 0.08 0.10 0.14 0.20] Distribuição de resolução das sombras
+#define SHADOW_BRIGHTNESS 0.66 // [0.55 0.60 0.66 0.70 0.75] Luz preservada nas sombras
+#define SHADOW_FILTER 1 // [0 1] Suavidade das bordas das sombras
 uniform sampler2D lightmap;
-uniform sampler2D shadowcolor0;
 uniform sampler2D shadowtex0;
-uniform sampler2D shadowtex1;
 uniform sampler2D texture;
-
 varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
-varying vec3 shadowPos; //normals don't exist for particles
-
-//fix artifacts when colored shadows are enabled
-const bool shadowcolor0Nearest = true;
+varying vec3 shadowPos;
 const bool shadowtex0Nearest = true;
-const bool shadowtex1Nearest = true;
+
+#include "/distort.glsl"
+
+float shadowVisibility(vec2 uv, float depth) {
+    #if SHADOW_FILTER == 0
+        return step(depth, texture2D(shadowtex0, uv).r + 0.0015);
+    #else
+        vec2 texel = vec2(1.0 / float(SHADOW_MAP_RESOLUTION));
+        float visibility = 0.0;
+        visibility += step(depth, texture2D(shadowtex0, uv + texel * vec2(-1.0, -1.0)).r + 0.0015);
+        visibility += step(depth, texture2D(shadowtex0, uv + texel * vec2( 1.0, -1.0)).r + 0.0015);
+        visibility += step(depth, texture2D(shadowtex0, uv + texel * vec2(-1.0,  1.0)).r + 0.0015);
+        visibility += step(depth, texture2D(shadowtex0, uv + texel * vec2( 1.0,  1.0)).r + 0.0015);
+        return visibility * 0.25;
+    #endif
+}
 
 void main() {
-	vec4 color = texture2D(texture, texcoord) * glcolor;
-	vec2 lm = lmcoord;
-
-	#if COLORED_SHADOWS == 0
-		//for normal shadows, only consider the closest thing to the sun,
-		//regardless of whether or not it's opaque.
-		if (shadowSample(shadowtex0, shadowPos.xy, shadowPos.z) < 0.5) {
-	#else
-		//for invisible and colored shadows, first check the closest OPAQUE thing to the sun.
-		if (shadowSample(shadowtex1, shadowPos.xy, shadowPos.z) < 0.5) {
-	#endif
-		//surface is in shadows. reduce light level.
-		lm.y *= SHADOW_BRIGHTNESS;
-	}
-	else {
-		//surface is in direct sunlight. increase light level.
-		lm.y = 31.0 / 32.0;
-		#if COLORED_SHADOWS == 1
-			//when colored shadows are enabled and there's nothing OPAQUE between us and the sun,
-			//perform a 2nd check to see if there's anything translucent between us and the sun.
-			if (shadowSample(shadowtex0, shadowPos.xy, shadowPos.z) < 0.5) {
-				//surface has translucent object between it and the sun. modify its color.
-				//if the block light is high, modify the color less.
-				vec4 shadowLightColor = texture2D(shadowcolor0, shadowPos.xy);
-				//make colors more intense when the shadow light color is more opaque.
-				shadowLightColor.rgb = mix(vec3(1.0), shadowLightColor.rgb, shadowLightColor.a);
-                        float shadowLuma = dot(shadowLightColor.rgb, vec3(0.299, 0.587, 0.114));
-                        shadowLightColor.rgb = mix(vec3(shadowLuma), shadowLightColor.rgb, 0.55);
-				//also make colors less intense when the block light level is high.
-				shadowLightColor.rgb = mix(shadowLightColor.rgb, vec3(1.0), lm.x);
-				//apply the color.
-				color.rgb *= shadowLightColor.rgb;
-			}
-		#endif
-	}
-	color *= texture2D(lightmap, lm);
-
-/* DRAWBUFFERS:0 */
-	gl_FragData[0] = color; //gcolor
+    vec4 color = texture2D(texture, texcoord) * glcolor;
+    vec2 lm = lmcoord;
+    if (shadowPos.x > 0.001 && shadowPos.x < 0.999 && shadowPos.y > 0.001 && shadowPos.y < 0.999 && shadowPos.z > 0.001 && shadowPos.z < 0.999) {
+        if (shadowVisibility(shadowPos.xy, shadowPos.z) < 0.5) lm.y *= SHADOW_BRIGHTNESS;
+    }
+    color *= texture2D(lightmap, lm);
+    /* DRAWBUFFERS:0 */
+    gl_FragData[0] = color;
 }

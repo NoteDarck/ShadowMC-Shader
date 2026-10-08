@@ -1,7 +1,14 @@
 #version 120
 
-attribute vec4 mc_Entity;
+#define SHADOW_MAP_RESOLUTION 1024 // [256 512 1024] Resolução do mapa de sombras
+#define SHADOW_BIAS 1.25 // [0.75 1.00 1.25 1.50 1.80] Correção contra shadow acne
+#define SHADOW_DISTORT_FACTOR 0.10 // [0.05 0.08 0.10 0.14 0.20] Distribuição de resolução das sombras
+#define SHADOW_BRIGHTNESS 0.66 // [0.55 0.60 0.66 0.70 0.75] Luz preservada nas sombras
+#define SHADOW_FILTER 1 // [0 1] Suavidade das bordas das sombras
+#define VEGETATION_SWAY 0.015 // [0.00 0.005 0.010 0.015 0.020 0.030] Balanço da vegetação
 
+attribute vec4 mc_Entity;
+uniform float frameTimeCounter;
 varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
@@ -9,19 +16,26 @@ varying vec4 glcolor;
 #include "/distort.glsl"
 
 void main() {
-	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-	lmcoord  = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
-	glcolor = gl_Color;
+    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+    lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
+    glcolor = gl_Color;
 
-	#ifdef EXCLUDE_FOLIAGE
-		if (mc_Entity.x == 10000.0) {
-			gl_Position = vec4(10.0);
-		}
-		else {
-	#endif
-			gl_Position = ftransform();
-			gl_Position.xyz = distort(gl_Position.xyz);
-	#ifdef EXCLUDE_FOLIAGE
-		}
-	#endif
+    #ifdef EXCLUDE_FOLIAGE
+        if (mc_Entity.x == 10000.0) {
+            gl_Position = vec4(10.0);
+            return;
+        }
+    #endif
+
+    vec4 vertex = gl_Vertex;
+    if (mc_Entity.x == 10000.0 && VEGETATION_SWAY > 0.0) {
+        float phase = dot(vertex.xz, vec2(1.71, 2.13));
+        float height = 0.35 + 0.65 * fract(abs(vertex.y));
+        float gust = sin(frameTimeCounter * 1.7 + phase) * 0.70 + sin(frameTimeCounter * 0.93 + phase * 1.37) * 0.30;
+        vertex.x += gust * VEGETATION_SWAY * height;
+        vertex.z += cos(frameTimeCounter * 1.35 + phase * 1.11) * VEGETATION_SWAY * 0.65 * height;
+    }
+
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vertex;
+    gl_Position.xyz = distort(gl_Position.xyz);
 }

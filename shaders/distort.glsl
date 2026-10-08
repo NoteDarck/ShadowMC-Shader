@@ -1,23 +1,31 @@
+#define SHADOW_MAP_RESOLUTION 1024 // [256 512 1024] Resolução do mapa de sombras
+#define SHADOW_BIAS 1.25 // [0.75 1.00 1.25 1.50 1.80] Correção contra shadow acne
+#define SHADOW_DISTORT_FACTOR 0.10 // [0.05 0.08 0.10 0.14 0.20] Distribuição de resolução das sombras
+#define SHADOW_BRIGHTNESS 0.66 // [0.55 0.60 0.66 0.70 0.75] Luz preservada nas sombras
+#define SHADOW_FILTER 1 // [0 1] Suavidade das bordas das sombras
 #ifndef SHADOW_DISTORT_ENABLED
-#define SHADOW_DISTORT_ENABLED // Distorção aumenta detalhe perto do jogador.
+#define SHADOW_DISTORT_ENABLED
 #endif
 #ifndef SHADOW_DISTORT_FACTOR
-#define SHADOW_DISTORT_FACTOR 0.10 // Distorção [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.40 0.50]
+#define SHADOW_DISTORT_FACTOR 0.10
 #endif
 #ifndef SHADOW_BIAS
-#define SHADOW_BIAS 1.00 // Corrige shadow acne; valores maiores reduzem acne [0.00 0.25 0.50 0.75 1.00 1.50 2.00 3.00]
+#define SHADOW_BIAS 1.25
+#endif
+#ifndef SHADOW_BRIGHTNESS
+#define SHADOW_BRIGHTNESS 0.66
+#endif
+#ifndef AMBIENT_STRENGTH
+#define AMBIENT_STRENGTH 0.12
+#endif
+#ifndef SHADOW_MAP_RESOLUTION
+#define SHADOW_MAP_RESOLUTION 1024
 #endif
 #ifndef NORMAL_BIAS
 #define NORMAL_BIAS
 #endif
 #ifndef EXCLUDE_FOLIAGE
 #define EXCLUDE_FOLIAGE
-#endif
-#ifndef SHADOW_BRIGHTNESS
-#define SHADOW_BRIGHTNESS 0.75 // Luz preservada na sombra [0.00 0.25 0.50 0.60 0.65 0.70 0.75 0.80 0.90 1.00]
-#endif
-#ifndef SHADOW_MAP_RESOLUTION
-#define SHADOW_MAP_RESOLUTION 1024 // Resolução [128 256 512 1024 2048 4096]
 #endif
 
 const int shadowMapResolution = SHADOW_MAP_RESOLUTION;
@@ -27,18 +35,12 @@ vec3 distort(vec3 pos) {
     float factor = length(pos.xy) + SHADOW_DISTORT_FACTOR;
     return vec3(pos.xy / factor, pos.z * 0.5);
 }
-
 float computeBias(vec3 pos) {
     float numerator = length(pos.xy) + SHADOW_DISTORT_FACTOR;
     numerator *= numerator;
-    return SHADOW_BIAS / shadowMapResolution * numerator / SHADOW_DISTORT_FACTOR;
+    return SHADOW_BIAS / float(shadowMapResolution) * numerator / SHADOW_DISTORT_FACTOR;
 }
 #else
-vec3 distort(vec3 pos) {
-    return vec3(pos.xy, pos.z * 0.5);
-}
-
-float computeBias(vec3 pos) {
-    return SHADOW_BIAS / shadowMapResolution;
-}
+vec3 distort(vec3 pos) { return vec3(pos.xy, pos.z * 0.5); }
+float computeBias(vec3 pos) { return SHADOW_BIAS / float(shadowMapResolution); }
 #endif
