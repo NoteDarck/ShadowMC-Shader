@@ -1,11 +1,7 @@
-#ifndef SHADOW_FILTER_GLSL_INCLUDED
-#define SHADOW_FILTER_GLSL_INCLUDED
+#ifndef SHADOWMC_SHADOW_FILTER_GLSL
+#define SHADOWMC_SHADOW_FILTER_GLSL
 
-#ifndef SHADOW_FILTER
-#define SHADOW_FILTER 1
-#endif
-
-#include "/distort.glsl"
+#include "/settings.glsl"
 
 float shadowDepthSample(sampler2D map, vec2 uv) {
     if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
@@ -15,7 +11,7 @@ float shadowDepthSample(sampler2D map, vec2 uv) {
 }
 
 float shadowCompare(sampler2D map, vec2 uv, float depth) {
-    return step(depth, shadowDepthSample(map, uv));
+    return step(depth, shadowDepthSample(map, uv) + 0.0015);
 }
 
 float shadowSample(sampler2D map, vec2 uv, float depth) {
@@ -41,4 +37,4 @@ float shadowSample(sampler2D map, vec2 uv, float depth) {
     #endif
 }
 
-#endif // SHADOW_FILTER_GLSL_INCLUDED
+#endif // SHADOWMC_SHADOW_FILTER_GLSL

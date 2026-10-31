@@ -1,14 +1,8 @@
 #version 120
 
-#define SHADOW_MAP_RESOLUTION 1024 // [256 512 1024] Resolução do mapa de sombras
-#define SHADOW_BIAS 1.25 // [0.75 1.00 1.25 1.50 1.80] Correção contra shadow acne
-#define SHADOW_DISTORT_FACTOR 0.10 // [0.05 0.08 0.10 0.14 0.20] Distribuição de resolução das sombras
-#define SHADOW_BRIGHTNESS 0.66 // [0.55 0.60 0.66 0.70 0.75] Luz preservada nas sombras
-#define SHADOW_FILTER 1 // [0 1] Suavidade das bordas das sombras
-#define VEGETATION_SWAY 0.015 // [0.00 0.005 0.010 0.015 0.020 0.030] Balanço da vegetação
-
 attribute vec4 mc_Entity;
 uniform float frameTimeCounter;
+
 varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
@@ -20,8 +14,15 @@ void main() {
     lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
     glcolor = gl_Color;
 
-    #ifdef EXCLUDE_FOLIAGE
+    #if EXCLUDE_FOLIAGE == 1
         if (mc_Entity.x == 10000.0) {
+            gl_Position = vec4(10.0);
+            return;
+        }
+    #endif
+
+    #if EXCLUDE_LIGHT_SOURCES == 1
+        if (mc_Entity.x == 10002.0 || mc_Entity.x == 10003.0 || mc_Entity.x == 10006.0) {
             gl_Position = vec4(10.0);
             return;
         }

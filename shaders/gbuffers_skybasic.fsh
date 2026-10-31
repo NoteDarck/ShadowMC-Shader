@@ -1,38 +1,43 @@
 #version 120
 
-#define SKY_HAZE_STRENGTH 0.35 // [0.10 0.25 0.35 0.45 0.60] Intensidade da atmosfera no horizonte
-
 uniform float viewHeight;
 uniform float viewWidth;
+uniform float frameTimeCounter;
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferProjectionInverse;
 uniform vec3 fogColor;
 uniform vec3 skyColor;
 
-varying vec4 starData; //rgb = star color, a = flag for weather or not this pixel is a star.
+varying vec4 starData; // rgb = cor da estrela, a = indica se o pixel é uma estrela
 
 const float sunPathRotation = 30.0;
 
+#include "/settings.glsl"
+
 float fogify(float x, float w) {
-	return w / (x * x + w);
+    return w / (x * x + w);
 }
 
 vec3 calcSkyColor(vec3 pos) {
-	float upDot = dot(pos, gbufferModelView[1].xyz); //not much, what's up with you?
-        return mix(skyColor, fogColor, fogify(max(upDot, 0.0), 0.25) * SKY_HAZE_STRENGTH);
+    float upDot = dot(pos, gbufferModelView[1].xyz);
+    return mix(skyColor, fogColor, fogify(max(upDot, 0.0), 0.25) * SKY_HAZE_STRENGTH);
 }
 
 void main() {
-	vec3 color;
-	if (starData.a > 0.5) {
-		color = starData.rgb;
-	}
-	else {
-		vec4 pos = vec4(gl_FragCoord.xy / vec2(viewWidth, viewHeight) * 2.0 - 1.0, 1.0, 1.0);
-		pos = gbufferProjectionInverse * pos;
-		color = calcSkyColor(normalize(pos.xyz));
-	}
+    vec3 color;
 
-/* DRAWBUFFERS:0 */
-	gl_FragData[0] = vec4(color, 1.0); //gcolor
+    if (starData.a > 0.5) {
+        float twinkle = 1.0;
+        #if STAR_TWINKLE == 1
+            twinkle = 0.82 + 0.18 * sin(frameTimeCounter * 2.0 + (gl_FragCoord.x + gl_FragCoord.y) * 0.07);
+        #endif
+        color = starData.rgb * twinkle;
+    } else {
+        vec4 pos = vec4(gl_FragCoord.xy / vec2(viewWidth, viewHeight) * 2.0 - 1.0, 1.0, 1.0);
+        pos = gbufferProjectionInverse * pos;
+        color = calcSkyColor(normalize(pos.xyz));
+    }
+
+    /* DRAWBUFFERS:0 */
+    gl_FragData[0] = vec4(color, 1.0);
 }
