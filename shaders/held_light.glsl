@@ -26,6 +26,7 @@ vec3 getHeldLightColor() {
     if (itemId == 10005) return vec3(0.55, 0.95, 1.00); // lanterna do mar
     if (itemId == 10006) return vec3(1.00, 0.28, 0.20); // tocha de redstone
     if (itemId == 10007) return vec3(1.00, 0.76, 0.42); // shroomlight / abóbora / froglight
+    if (itemId == 10008) return vec3(1.00, 0.42, 0.12); // balde de lava
 
     vec3 customColor = heldBlockLightColor2;
     if (heldBlockLightValue >= heldBlockLightValue2) {
@@ -40,6 +41,8 @@ vec3 getHeldLightColor() {
 }
 
 float getHeldLightLevel() {
+    if (getHeldLightItemId() == 10008) return 1.0;
+
     int level = heldBlockLightValue;
     if (heldBlockLightValue2 > level) {
         level = heldBlockLightValue2;

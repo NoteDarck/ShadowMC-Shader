@@ -14,7 +14,7 @@ Shaderpack leve para Minecraft Java com Iris/OptiFine, focado em sombras estáve
 - Névoa sutil no horizonte e cintilação das estrelas.
 - Aura RGB configurável em itens encantados.
 - Efeito submerso (tinta azul + ondulação) e vinheta discreta no composite.
-- **Luz na mão**: tochas, lanternas, glowstone, fogueiras, sea lantern, redstone torch, shroomlight, jack o'lantern e froglights iluminam o mundo ao redor e a própria mão. Funciona com item na mão principal ou secundária.
+- **Luz na mão**: tochas, lanternas, glowstone, fogueiras, sea lantern, redstone torch, shroomlight, jack o'lantern, froglights e balde de lava iluminam o mundo ao redor e a própria mão. Funciona com item na mão principal ou secundária.
 
 ## Luz na mão
 
@@ -26,6 +26,7 @@ O pack usa os uniforms `heldItemId`, `heldBlockLightValue` e `heldBlockLightColo
 - `10005`: lanterna do mar (azul-esverdeado)
 - `10006`: tocha de redstone (vermelho)
 - `10007`: shroomlight / jack o'lantern / froglights (dourado)
+- `10008`: balde de lava (laranja intenso)
 
 A intensidade (`HAND_LIGHT_STRENGTH`) e o alcance (`HAND_LIGHT_RADIUS`) são configuráveis. Se outro mod fornecer uma cor personalizada via `heldBlockLightColor`, ela é usada automaticamente.
 

@@ -34,7 +34,7 @@ void main() {
 
     vec3 light = texture2D(lightmap, lm).rgb;
 
-    if (heldBlockLightValue > 0 || heldBlockLightValue2 > 0) {
+    if (getHeldLightLevel() > 0.0) {
         light += getHeldLightContribution(heldLightDist);
     }
 

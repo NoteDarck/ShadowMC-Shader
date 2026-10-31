@@ -14,7 +14,7 @@ void main() {
     vec4 albedo = texture2D(texture, texcoord) * glcolor;
     vec3 light = texture2D(lightmap, lmcoord).rgb;
 
-    if (heldBlockLightValue > 0 || heldBlockLightValue2 > 0) {
+    if (getHeldLightLevel() > 0.0) {
         light += getHeldLightColor() * (getHeldLightLevel() * HAND_LIGHT_STRENGTH);
     }
 
