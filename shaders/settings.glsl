@@ -5,6 +5,7 @@
 // Sombras
 // ------------------------------------------------------------
 const int shadowMapResolution = 1024; // [256 512 1024] Resolução do mapa de sombras
+const float shadowDistance = 128.0; // [64.0 80.0 96.0 112.0 128.0 160.0 192.0 224.0 256.0] Distância de renderização das sombras
 #define SHADOW_DISTORT_ENABLED 1 // [0 1] Distorção de sombras perto do jogador
 #define SHADOW_DISTORT_FACTOR 0.10 // [0.05 0.08 0.10 0.14 0.20] Intensidade da distorção
 #define SHADOW_BIAS 1.25 // [0.75 1.00 1.25 1.50 1.80] Correção contra shadow acne

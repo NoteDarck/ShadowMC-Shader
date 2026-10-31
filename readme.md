@@ -31,13 +31,13 @@ A intensidade (`HAND_LIGHT_STRENGTH`) e o alcance (`HAND_LIGHT_RADIUS`) são con
 
 ## Perfis
 
-| Perfil | Shadow map | Filtro | Uso sugerido |
-| --- | --- | --- | --- |
-| Potato | 256 | 1 amostra | PCs bem modestos |
-| Low | 512 | 1 amostra | PCs modestos |
-| Balanced | 1024 | 4 amostras | Recomendado |
-| High | 1024 | 4 amostras | Mais contraste e efeitos |
-| Ultra | 1024 | 9 amostras | Qualidade máxima opcional |
+| Perfil | Shadow map | Distância | Filtro | Uso sugerido |
+| --- | --- | --- | --- | --- |
+| Potato | 256 | 64 blocos | 1 amostra | PCs bem modestos |
+| Low | 512 | 96 blocos | 1 amostra | PCs modestos |
+| Balanced | 1024 | 128 blocos | 4 amostras | Recomendado |
+| High | 1024 | 160 blocos | 4 amostras | Mais contraste e efeitos |
+| Ultra | 1024 | 192 blocos | 9 amostras | Qualidade máxima opcional |
 
 As opções podem ser alteradas individualmente no menu de shaders. Todos os perfis mantêm o custo controlado: não há pós-processamento pesado, buffer extra, SSR, bloom, AO ou histórico de frames.
 
