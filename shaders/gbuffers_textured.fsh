@@ -8,6 +8,7 @@ varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec4 shadowPos;
+varying vec3 viewPosition;
 varying float heldLightDist;
 
 const bool shadowtex0Nearest = true;
@@ -15,9 +16,12 @@ const bool shadowtex0Nearest = true;
 #include "/settings.glsl"
 #include "/shadow_filter.glsl"
 #include "/held_light.glsl"
+#include "/fog.glsl"
 
 void main() {
     vec4 albedo = texture2D(texture, texcoord) * glcolor;
+    if (albedo.a < 0.1) discard;
+
     vec2 lm = lmcoord;
 
     if (shadowPos.w > 0.001 &&
@@ -34,6 +38,8 @@ void main() {
         light += getHeldLightContribution(heldLightDist);
     }
 
+    vec3 color = applyFog(albedo.rgb * light, viewPosition);
+
     /* DRAWBUFFERS:0 */
-    gl_FragData[0] = vec4(albedo.rgb * light, albedo.a);
+    gl_FragData[0] = vec4(color, albedo.a);
 }

@@ -8,6 +8,7 @@ varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec4 shadowPos;
+varying vec3 viewPosition;
 varying float heldLightDist;
 
 #include "/distort.glsl"
@@ -18,6 +19,7 @@ void main() {
     glcolor = gl_Color;
 
     vec4 viewPos = gl_ModelViewMatrix * gl_Vertex;
+    viewPosition = viewPos.xyz;
     heldLightDist = length(viewPos.xyz);
 
     vec4 playerPos = gbufferModelViewInverse * viewPos;
@@ -26,8 +28,8 @@ void main() {
     shadowPos.xyz = distort(shadowPos.xyz) * 0.5 + 0.5;
 
     #if NORMAL_BIAS == 1
-        vec4 normal = shadowProjection * vec4(mat3(shadowModelView) * (mat3(gbufferModelViewInverse) * normalize(gl_NormalMatrix * gl_Normal)), 1.0);
-        shadowPos.xyz += normal.xyz / normal.w * bias;
+        vec4 normal = shadowProjection * vec4(mat3(shadowModelView) * (mat3(gbufferModelViewInverse) * normalize(gl_NormalMatrix * gl_Normal)), 0.0);
+        shadowPos.xyz += normal.xyz * bias;
     #else
         shadowPos.z -= bias;
     #endif

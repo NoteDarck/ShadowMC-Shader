@@ -8,6 +8,7 @@ varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec4 shadowPos;
+varying vec3 viewPosition;
 varying float heldLightDist;
 
 #include "/distort.glsl"
@@ -18,6 +19,7 @@ void main() {
     glcolor = gl_Color;
 
     vec4 viewPos = gl_ModelViewMatrix * gl_Vertex;
+    viewPosition = viewPos.xyz;
     heldLightDist = length(viewPos.xyz);
 
     vec4 playerPos = gbufferModelViewInverse * viewPos;

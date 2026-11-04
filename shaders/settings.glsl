@@ -32,6 +32,7 @@ const float shadowDistance = 128.0; // [64.0 80.0 96.0 112.0 128.0 160.0 192.0 2
 // ------------------------------------------------------------
 #define VEGETATION_SWAY 0.015 // [0.00 0.005 0.010 0.015 0.020 0.030] Balanço da vegetação
 #define SKY_HAZE_STRENGTH 0.35 // [0.10 0.25 0.35 0.45 0.60] Névoa no horizonte
+#define FOG_ENABLED 1 // [0 1] Neblina de distância
 #define STAR_TWINKLE 1 // [0 1] Cintilação das estrelas
 #define UNDERWATER_EFFECTS 1 // [0 1] Efeitos embaixo d'água
 #define VIGNETTE_STRENGTH 0.12 // [0.00 0.06 0.12 0.18 0.24] Vinheta discreta

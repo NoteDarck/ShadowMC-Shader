@@ -15,21 +15,26 @@ void main() {
     glcolor = gl_Color;
 
     #if EXCLUDE_FOLIAGE == 1
-        if (mc_Entity.x == 10000.0) {
+        if (mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) {
             gl_Position = vec4(10.0);
             return;
         }
     #endif
 
+    if (mc_Entity.x == 10001.0) {
+        gl_Position = vec4(10.0);
+        return;
+    }
+
     #if EXCLUDE_LIGHT_SOURCES == 1
-        if (mc_Entity.x == 10002.0 || mc_Entity.x == 10003.0 || mc_Entity.x == 10006.0) {
+        if (mc_Entity.x >= 10002.0 && mc_Entity.x <= 10006.0) {
             gl_Position = vec4(10.0);
             return;
         }
     #endif
 
     vec4 vertex = gl_Vertex;
-    if (mc_Entity.x == 10000.0 && VEGETATION_SWAY > 0.0) {
+    if ((mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) && VEGETATION_SWAY > 0.0) {
         float phase = dot(vertex.xz, vec2(1.71, 2.13));
         float height = 0.35 + 0.65 * fract(abs(vertex.y));
         float gust = sin(frameTimeCounter * 1.7 + phase) * 0.70 + sin(frameTimeCounter * 0.93 + phase * 1.37) * 0.30;

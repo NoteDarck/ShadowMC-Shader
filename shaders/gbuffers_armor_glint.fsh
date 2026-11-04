@@ -14,6 +14,7 @@ varying vec4 glcolor;
 void main() {
     vec4 tex = texture2D(texture, texcoord);
     vec4 color = tex * glcolor;
+    if (color.a < 0.1) discard;
     vec3 light = texture2D(lightmap, lmcoord).rgb;
 
     if (getHeldLightLevel() > 0.0) {

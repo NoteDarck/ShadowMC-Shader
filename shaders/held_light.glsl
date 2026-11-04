@@ -10,8 +10,13 @@ uniform int heldBlockLightValue2;
 uniform vec3 heldBlockLightColor;
 uniform vec3 heldBlockLightColor2;
 
+float getHeldLightLevelForHand(int itemId, int lightValue) {
+    if (itemId == 10008) return 1.0;
+    return clamp(float(lightValue) / 15.0, 0.0, 1.0);
+}
+
 int getHeldLightItemId() {
-    if (heldBlockLightValue2 > heldBlockLightValue) {
+    if (getHeldLightLevelForHand(heldItemId2, heldBlockLightValue2) > getHeldLightLevelForHand(heldItemId, heldBlockLightValue)) {
         return heldItemId2;
     }
     return heldItemId;
@@ -27,6 +32,8 @@ vec3 getHeldLightColor() {
     if (itemId == 10006) return vec3(1.00, 0.28, 0.20); // tocha de redstone
     if (itemId == 10007) return vec3(1.00, 0.76, 0.42); // shroomlight / abóbora / froglight
     if (itemId == 10008) return vec3(1.00, 0.42, 0.12); // balde de lava
+    if (itemId == 10009) return vec3(0.62, 0.48, 1.00); // ametista / obsidiana chorando
+    if (itemId == 10010) return vec3(1.00, 0.96, 0.86); // bastão do End
 
     vec3 customColor = heldBlockLightColor2;
     if (heldBlockLightValue >= heldBlockLightValue2) {
@@ -41,13 +48,10 @@ vec3 getHeldLightColor() {
 }
 
 float getHeldLightLevel() {
-    if (getHeldLightItemId() == 10008) return 1.0;
-
-    int level = heldBlockLightValue;
-    if (heldBlockLightValue2 > level) {
-        level = heldBlockLightValue2;
-    }
-    return clamp(float(level) / 15.0, 0.0, 1.0);
+    return max(
+        getHeldLightLevelForHand(heldItemId, heldBlockLightValue),
+        getHeldLightLevelForHand(heldItemId2, heldBlockLightValue2)
+    );
 }
 
 vec3 getHeldLightContribution(float distanceToPlayer) {

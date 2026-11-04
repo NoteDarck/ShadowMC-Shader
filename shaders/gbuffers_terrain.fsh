@@ -19,9 +19,12 @@ const bool shadowtex0Nearest = true;
 #include "/settings.glsl"
 #include "/shadow_filter.glsl"
 #include "/held_light.glsl"
+#include "/fog.glsl"
 
 void main() {
     vec4 albedo = texture2D(texture, texcoord) * glcolor;
+    if (albedo.a < 0.1) discard;
+
     vec2 lm = lmcoord;
 
     if (shadowPos.w > 0.001 &&
@@ -57,6 +60,8 @@ void main() {
             color += vec3(0.92, 0.94, 1.0) * (metalSpec * METAL_SPECULAR);
         }
     }
+
+    color = applyFog(color, viewPosition);
 
     /* DRAWBUFFERS:0 */
     gl_FragData[0] = vec4(color, albedo.a);
