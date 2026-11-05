@@ -62,6 +62,15 @@ As opções podem ser alteradas individualmente no menu de shaders. Todos os per
 - IDs de blocos modernos (1.13+) com tratamento de `short_grass`/`grass` por versão e fallback legado em `block.properties`.
 - A luz na mão depende de `heldItemId`/`heldBlockLightValue`; em versões muito antigas do OptiFine ela pode ficar desativada, sem quebrar o pack.
 
+## Versões e branches
+
+- `mc-1.13` a `mc-1.21`: linhas modernas do Minecraft Java.
+- `mc-26.1`, `mc-26.2`, `mc-26.3`: versões atuais.
+- `mc-legacy`: Minecraft 1.7.10 a 1.12.2, usando o fallback de IDs antigos.
+- `main`: código-fonte atualizado e base para novos desenvolvimentos.
+
+Os ZIPs por versão são publicados no release `v0.1.0`.
+
 ## Créditos
 
 Estrutura de sombras baseada no exemplo clássico de shadow mapping para shaders de Minecraft. Reconstruído, otimizado e expandido por NoteDarck.
