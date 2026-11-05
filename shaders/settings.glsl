@@ -47,6 +47,7 @@ const float shadowDistance = 128.0; // [64.0 80.0 96.0 112.0 128.0 160.0 192.0 2
 // Aura de encantamento
 // ------------------------------------------------------------
 #define ENCHANT_AURA_STRENGTH 0.30 // [0.00 0.15 0.30 0.45 0.60] Brilho da aura
+#define ENCHANT_AURA_COLOR_PRESET 0 // [0 1 2 3 4 5 6 7] Cor da aura (0=Personalizada, 1=Azul, 2=Roxo, 3=Dourado, 4=Verde, 5=Vermelho, 6=Ciano, 7=Rosa)
 #define ENCHANT_AURA_COLOR_R 0.30 // [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00] Vermelho
 #define ENCHANT_AURA_COLOR_G 0.65 // [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00] Verde
 #define ENCHANT_AURA_COLOR_B 1.00 // [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00] Azul

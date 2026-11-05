@@ -16,6 +16,7 @@ Shaderpack leve para Minecraft Java com Iris/OptiFine, focado em sombras estáve
 - Aura RGB configurável em itens encantados.
 - Efeito submerso (tinta azul + ondulação) e vinheta discreta no composite.
 - **Luz na mão**: tochas, lanternas, glowstone, fogueiras, sea lantern, redstone torch, shroomlight, jack o'lantern, froglights, balde de lava, glow lichen, sea pickle, ametista, obsidiana chorando, beacon, conduit e end rod iluminam o mundo ao redor e a própria mão. Funciona com item na mão principal ou secundária.
+- **Sombras do jogador**: o personagem também é renderizado no shadow pass (`shadowPlayer=true`), inclusive em 1.20.1.
 
 ## Luz na mão
 
@@ -32,6 +33,14 @@ O pack usa os uniforms `heldItemId`, `heldBlockLightValue` e `heldBlockLightColo
 - `10010`: bastão do End (branco quente)
 
 A intensidade (`HAND_LIGHT_STRENGTH`) e o alcance (`HAND_LIGHT_RADIUS`) são configuráveis, e a neblina pode ser desligada em `FOG_ENABLED`. Se outro mod fornecer uma cor personalizada via `heldBlockLightColor`, ela é usada automaticamente.
+
+## Aura de encantamento
+
+A aura colorida é aplicada ao brilho de equipamentos encantados (armadura e item na mão). No menu, abra `ENCHANTMENT`:
+
+- `ENCHANT_AURA_STRENGTH`: intensidade da aura.
+- `ENCHANT_AURA_COLOR_PRESET`: `0` para cor personalizada ou presets `1` azul, `2` roxo, `3` dourado, `4` verde, `5` vermelho, `6` ciano e `7` rosa.
+- `ENCHANT_AURA_COLOR_R`, `ENCHANT_AURA_COLOR_G` e `ENCHANT_AURA_COLOR_B`: cor personalizada quando o preset é `0`.
 
 ## Perfis
 

@@ -24,6 +24,21 @@ void main() {
     float mask = tex.a * glcolor.a;
     float shimmer = 0.85 + 0.15 * sin(frameTimeCounter * 2.5 + (texcoord.x + texcoord.y) * 18.0);
     vec3 aura = vec3(ENCHANT_AURA_COLOR_R, ENCHANT_AURA_COLOR_G, ENCHANT_AURA_COLOR_B);
+    #if ENCHANT_AURA_COLOR_PRESET == 1
+        aura = vec3(0.30, 0.65, 1.00);
+    #elif ENCHANT_AURA_COLOR_PRESET == 2
+        aura = vec3(0.65, 0.30, 1.00);
+    #elif ENCHANT_AURA_COLOR_PRESET == 3
+        aura = vec3(1.00, 0.75, 0.25);
+    #elif ENCHANT_AURA_COLOR_PRESET == 4
+        aura = vec3(0.30, 1.00, 0.45);
+    #elif ENCHANT_AURA_COLOR_PRESET == 5
+        aura = vec3(1.00, 0.30, 0.25);
+    #elif ENCHANT_AURA_COLOR_PRESET == 6
+        aura = vec3(0.25, 1.00, 0.95);
+    #elif ENCHANT_AURA_COLOR_PRESET == 7
+        aura = vec3(1.00, 0.40, 0.75);
+    #endif
 
     color.rgb = color.rgb * light + aura * (mask * ENCHANT_AURA_STRENGTH * shimmer);
     color.a = tex.a * glcolor.a;
