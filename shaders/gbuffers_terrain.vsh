@@ -13,6 +13,7 @@ varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec4 shadowPos;
 varying float materialType;
+varying float foliageType;
 varying vec3 viewPosition;
 varying vec3 viewNormal;
 varying float heldLightDist;
@@ -24,6 +25,7 @@ void main() {
     lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
     glcolor = gl_Color;
 
+    foliageType = (mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) ? 1.0 : 0.0;
     materialType = 0.0;
     if (mc_Entity.x == 10001.0) {
         materialType = 1.0;

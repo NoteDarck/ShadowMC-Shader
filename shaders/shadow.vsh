@@ -6,6 +6,7 @@ uniform float frameTimeCounter;
 varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
+varying float foliageType;
 
 #include "/distort.glsl"
 
@@ -13,6 +14,7 @@ void main() {
     texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
     lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
     glcolor = gl_Color;
+    foliageType = (mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) ? 1.0 : 0.0;
 
     #if EXCLUDE_FOLIAGE == 1
         if (mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) {

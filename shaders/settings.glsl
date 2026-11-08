@@ -14,6 +14,7 @@ const float shadowDistance = 128.0; // [64.0 80.0 96.0 112.0 128.0 160.0 192.0 2
 #define NORMAL_BIAS 1 // [0 1] Bias pela normal (reduz peter-panning)
 #define EXCLUDE_FOLIAGE 1 // [0 1] Plantas não projetam sombra
 #define EXCLUDE_LIGHT_SOURCES 1 // [0 1] Tochas e lanternas não projetam sombra
+#define OPAQUE_LEAVES 0 // [0 1] Folhas sem transparência
 
 // ------------------------------------------------------------
 // Iluminação
@@ -36,6 +37,8 @@ const float shadowDistance = 128.0; // [64.0 80.0 96.0 112.0 128.0 160.0 192.0 2
 #define STAR_TWINKLE 1 // [0 1] Cintilação das estrelas
 #define UNDERWATER_EFFECTS 1 // [0 1] Efeitos embaixo d'água
 #define VIGNETTE_STRENGTH 0.12 // [0.00 0.06 0.12 0.18 0.24] Vinheta discreta
+#define COLOR_SATURATION 1.00 // [0.70 0.85 1.00 1.15 1.30] Saturação geral
+#define COLOR_CONTRAST 1.00 // [0.90 1.00 1.10 1.20] Contraste geral
 
 // ------------------------------------------------------------
 // Luz na mão

@@ -17,6 +17,8 @@ Shaderpack leve para Minecraft Java com Iris/OptiFine, focado em sombras estáve
 - Efeito submerso (tinta azul + ondulação) e vinheta discreta no composite.
 - **Luz na mão**: tochas, lanternas, glowstone, fogueiras, sea lantern, redstone torch, shroomlight, jack o'lantern, froglights, balde de lava, glow lichen, sea pickle, ametista, obsidiana chorando, beacon, conduit e end rod iluminam o mundo ao redor e a própria mão. Funciona com item na mão principal ou secundária.
 - **Sombras do jogador**: o personagem também é renderizado no shadow pass (`shadowPlayer=true`), inclusive em 1.20.1.
+- **Folhas opacas opcionalmente**: remove o efeito quadriculado/transparente das folhas sem alterar o restante do terreno.
+- **Imagem configurável**: saturação e contraste gerais para ajustar o visual sem editar shader.
 
 ## Luz na mão
 
@@ -41,6 +43,12 @@ A aura colorida é aplicada ao brilho de equipamentos encantados (armadura e ite
 - `ENCHANT_AURA_STRENGTH`: intensidade da aura.
 - `ENCHANT_AURA_COLOR_PRESET`: `0` para cor personalizada ou presets `1` azul, `2` roxo, `3` dourado, `4` verde, `5` vermelho, `6` ciano e `7` rosa.
 - `ENCHANT_AURA_COLOR_R`, `ENCHANT_AURA_COLOR_G` e `ENCHANT_AURA_COLOR_B`: cor personalizada quando o preset é `0`.
+
+## Folhas e imagem
+
+- `OPAQUE_LEAVES`: use `1` na tela `SHADOWS` para remover a transparência quadriculada das folhas. O padrão `0` mantém o visual vanilla.
+- `COLOR_SATURATION`: reduz ou aumenta a intensidade das cores no composite.
+- `COLOR_CONTRAST`: ajusta o contraste final sem alterar a iluminação das sombras.
 
 ## Perfis
 
@@ -78,7 +86,7 @@ As opções podem ser alteradas individualmente no menu de shaders. Todos os per
 - `mc-legacy`: Minecraft 1.7.10 a 1.12.2, usando o fallback de IDs antigos.
 - `main`: código-fonte atualizado e base para novos desenvolvimentos.
 
-Os ZIPs por versão são publicados no release `v0.1.1`.
+Os ZIPs por versão são publicados no release `v0.1.2`.
 
 ## Créditos
 

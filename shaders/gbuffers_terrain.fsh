@@ -10,6 +10,7 @@ varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec4 shadowPos;
 varying float materialType;
+varying float foliageType;
 varying vec3 viewPosition;
 varying vec3 viewNormal;
 varying float heldLightDist;
@@ -23,6 +24,9 @@ const bool shadowtex0Nearest = true;
 
 void main() {
     vec4 albedo = texture2D(texture, texcoord) * glcolor;
+    #if OPAQUE_LEAVES == 1
+        if (foliageType > 0.5) albedo.a = 1.0;
+    #endif
     if (albedo.a < 0.1) discard;
 
     vec2 lm = lmcoord;
