@@ -25,7 +25,7 @@ const bool shadowtex0Nearest = true;
 void main() {
     vec4 albedo = texture2D(texture, texcoord) * glcolor;
     #if OPAQUE_LEAVES == 1
-        if (foliageType > 0.5) albedo.a = 1.0;
+        if (foliageType == 1.0) albedo.a = 1.0;
     #endif
     if (albedo.a < 0.1) discard;
 

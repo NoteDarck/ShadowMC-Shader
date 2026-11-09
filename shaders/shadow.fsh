@@ -13,7 +13,7 @@ varying float foliageType;
 void main() {
     vec4 color = texture2D(texture, texcoord) * glcolor;
     #if OPAQUE_LEAVES == 1
-        if (foliageType > 0.5) color.a = 1.0;
+        if (foliageType == 1.0) color.a = 1.0;
     #endif
     if (color.a < 0.1) discard;
 

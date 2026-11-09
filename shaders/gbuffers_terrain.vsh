@@ -25,7 +25,15 @@ void main() {
     lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
     glcolor = gl_Color;
 
-    foliageType = (mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) ? 1.0 : 0.0;
+    if (mc_Entity.x == 10009.0) {
+        foliageType = 1.0;
+    } else if (mc_Entity.x == 10000.0) {
+        foliageType = 2.0;
+    } else if (mc_Entity.x == 10008.0) {
+        foliageType = 3.0;
+    } else {
+        foliageType = 0.0;
+    }
     materialType = 0.0;
     if (mc_Entity.x == 10001.0) {
         materialType = 1.0;
@@ -34,7 +42,7 @@ void main() {
     }
 
     vec4 vertex = gl_Vertex;
-    if ((mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0) && VEGETATION_SWAY > 0.0) {
+    if ((mc_Entity.x == 10000.0 || mc_Entity.x == 10008.0 || mc_Entity.x == 10009.0) && VEGETATION_SWAY > 0.0) {
         float phase = dot(vertex.xz, vec2(1.71, 2.13));
         float height = 0.35 + 0.65 * fract(abs(vertex.y));
         float gust = sin(frameTimeCounter * 1.7 + phase) * 0.70 + sin(frameTimeCounter * 0.93 + phase * 1.37) * 0.30;
