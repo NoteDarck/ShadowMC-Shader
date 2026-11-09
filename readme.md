@@ -86,7 +86,7 @@ As opções podem ser alteradas individualmente no menu de shaders. Todos os per
 - `mc-legacy`: Minecraft 1.7.10 a 1.12.2, usando o fallback de IDs antigos.
 - `main`: código-fonte atualizado e base para novos desenvolvimentos.
 
-Os ZIPs por versão são publicados no release `v0.1.2`.
+Os ZIPs por versão são publicados no release `v0.1.2-updated`.
 
 ## Créditos
 
